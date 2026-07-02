@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use App\Enums\ErrorCode;
+use App\Enums\HttpStatus;
 use RuntimeException;
 
 /**
- * Base typed API exception. Concrete subclasses map to error codes
+ * Base typed API exception mapped to the standard envelope
  * per spec/03-error-manage/03-error-code-registry.
  */
 abstract class ApiException extends RuntimeException
 {
-    abstract public function errorCode(): int;
+    abstract public function code(): ErrorCode;
 
-    abstract public function httpStatus(): int;
+    abstract public function status(): HttpStatus;
 }
