@@ -1,5 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+declare(strict_types=1);
 
-Route::get('/', fn () => response()->json(['status' => 'ok']));
+// No web routes — REST API only.
