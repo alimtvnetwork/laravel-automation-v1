@@ -7,15 +7,15 @@ namespace App\Exceptions;
 use App\Enums\ErrorCode;
 use App\Enums\HttpStatus;
 
-final class UnsupportedMediaTypeException extends ApiException
+final class PayloadTooLargeException extends ApiException
 {
     public function code(): ErrorCode
     {
-        return ErrorCode::UnsupportedMediaType;
+        return ErrorCode::PayloadTooLarge;
     }
 
     public function status(): HttpStatus
     {
-        return HttpStatus::UnsupportedMedia;
+        return HttpStatus::PayloadTooLarge;
     }
 }

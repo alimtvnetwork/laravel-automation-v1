@@ -9,6 +9,7 @@ use App\Enums\HttpStatus;
 use App\Http\Responses\Envelope;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -22,16 +23,15 @@ final class Handler
 {
     public static function register(Exceptions $exceptions): void
     {
-        $exceptions->render(function (Throwable $e, Request $request) {
-            if ($request->expectsJson() || $request->is('*')) {
-                return self::toEnvelope($e);
-            }
-            return null;
-        });
+        $exceptions->render(fn (Throwable $e, Request $request) => self::toEnvelope($e));
     }
 
-    private static function toEnvelope(Throwable $e): \Illuminate\Http\JsonResponse
+    private static function toEnvelope(Throwable $e): JsonResponse
     {
+        if ($e instanceof ApiException) {
+            return Envelope::error($e->code(), $e->getMessage(), $e->status());
+        }
+
         if ($e instanceof ValidationException) {
             return Envelope::error(
                 ErrorCode::ValidationError,
@@ -42,18 +42,14 @@ final class Handler
         }
 
         if ($e instanceof ModelNotFoundException || $e instanceof NotFoundHttpException) {
-            return Envelope::error(
-                ErrorCode::NotFound,
-                'Resource not found',
-                HttpStatus::NotFound,
-            );
+            return Envelope::error(ErrorCode::NotFound, 'Resource not found', HttpStatus::NotFound);
         }
 
         if ($e instanceof HttpExceptionInterface) {
             $status = HttpStatus::tryFrom($e->getStatusCode()) ?? HttpStatus::ServerError;
             return Envelope::error(
                 self::codeForStatus($status),
-                $e->getMessage() ?: 'Request failed',
+                $e->getMessage() !== '' ? $e->getMessage() : 'Request failed',
                 $status,
             );
         }
@@ -73,6 +69,8 @@ final class Handler
             HttpStatus::Unauthorized        => ErrorCode::Unauthorized,
             HttpStatus::Forbidden           => ErrorCode::Forbidden,
             HttpStatus::NotFound            => ErrorCode::NotFound,
+            HttpStatus::PayloadTooLarge     => ErrorCode::PayloadTooLarge,
+            HttpStatus::UnsupportedMedia    => ErrorCode::UnsupportedMediaType,
             HttpStatus::UnprocessableEntity => ErrorCode::ValidationError,
             default                         => ErrorCode::ServerError,
         };

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\ErrorCode;
-use App\Enums\HttpStatus;
-use App\Exceptions\ApiException;
+use App\Exceptions\PayloadTooLargeException;
+use App\Exceptions\StorageException;
+use App\Exceptions\UnsupportedMediaTypeException;
 use App\Models\FileRecord;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -41,8 +41,8 @@ final class FileService
         return FileRecord::query()->create([
             'owner_id' => $ownerId,
             'filename' => $file->getClientOriginalName(),
-            'mime'     => $file->getMimeType(),
-            'size'     => $file->getSize(),
+            'mime'     => (string) $file->getMimeType(),
+            'size'     => (int) $file->getSize(),
             'path'     => $path,
         ]);
     }
@@ -74,32 +74,14 @@ final class FileService
         if (in_array($file->getMimeType(), self::ALLOWED_MIME, true)) {
             return;
         }
-        throw new UnsupportedMediaTypeException('MIME type not allowed: '.$file->getMimeType());
+        throw new UnsupportedMediaTypeException('MIME type not allowed: '.(string) $file->getMimeType());
     }
 
     private function assertSize(UploadedFile $file): void
     {
-        if ($file->getSize() <= self::MAX_BYTES) {
+        if ((int) $file->getSize() <= self::MAX_BYTES) {
             return;
         }
         throw new PayloadTooLargeException('File exceeds 10 MB limit');
     }
-}
-
-final class UnsupportedMediaTypeException extends ApiException
-{
-    public function errorCode(): int { return 415; }
-    public function httpStatus(): int { return HttpStatus::UnprocessableEntity->value; }
-}
-
-final class PayloadTooLargeException extends ApiException
-{
-    public function errorCode(): int { return 413; }
-    public function httpStatus(): int { return 413; }
-}
-
-final class StorageException extends ApiException
-{
-    public function errorCode(): int { return 500; }
-    public function httpStatus(): int { return 500; }
 }
