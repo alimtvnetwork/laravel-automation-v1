@@ -6,7 +6,7 @@ namespace App\Constants;
 
 /**
  * Central constants — no magic strings allowed elsewhere.
- * Per spec/02-coding-guidelines cross-language rule.
+ * Per 02-spec/02-coding-guidelines cross-language rule.
  */
 final class ApiConstants
 {

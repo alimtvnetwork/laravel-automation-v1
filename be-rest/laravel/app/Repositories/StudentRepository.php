@@ -8,7 +8,7 @@ use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * DB isolation for Student — split-db ready per spec/05-split-db-architecture.
+ * DB isolation for Student — split-db ready per 02-spec/05-split-db-architecture.
  */
 final class StudentRepository
 {

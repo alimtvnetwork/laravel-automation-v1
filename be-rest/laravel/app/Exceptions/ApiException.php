@@ -10,7 +10,7 @@ use RuntimeException;
 
 /**
  * Base typed API exception mapped to the standard envelope
- * per spec/03-error-manage/03-error-code-registry.
+ * per 02-spec/03-error-manage/03-error-code-registry.
  */
 abstract class ApiException extends RuntimeException
 {

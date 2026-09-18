@@ -6,7 +6,7 @@
  * Driver selection is controlled entirely by the DB_CONNECTION env var.
  * Supported: sqlite | mysql | pgsql
  *
- * Per spec/21-app/00-rest-general/spec.md — DB is swappable via env only,
+ * Per 02-spec/21-app/00-rest-general/spec.md — DB is swappable via env only,
  * no code changes required.
  */
 

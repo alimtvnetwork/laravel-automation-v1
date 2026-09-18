@@ -10,7 +10,7 @@ use App\Enums\HttpStatus;
 use Illuminate\Http\JsonResponse;
 
 /**
- * Unified JSON envelope per spec/21-app/00-rest-general/spec.md §5.
+ * Unified JSON envelope per 02-spec/21-app/00-rest-general/spec.md §5.
  */
 final class Envelope
 {

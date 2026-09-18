@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Enums;
 
 /**
- * Machine-readable error codes per spec/21-app/00-rest-general/spec.md §4.2.
+ * Machine-readable error codes per 02-spec/21-app/00-rest-general/spec.md §4.2.
  */
 enum ErrorCode: string
 {

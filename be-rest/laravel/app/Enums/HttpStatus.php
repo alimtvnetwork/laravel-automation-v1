@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Enums;
 
 /**
- * HTTP status codes per spec/21-app/00-rest-general/spec.md §5.2.
+ * HTTP status codes per 02-spec/21-app/00-rest-general/spec.md §5.2.
  */
 enum HttpStatus: int
 {

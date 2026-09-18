@@ -1,7 +1,7 @@
 # Laravel REST — Reference Sample
 
 Full reference implementation of the general REST spec
-(`spec/21-app/00-rest-general/spec.md`) using Laravel 11.
+(`02-spec/21-app/00-rest-general/spec.md`) using Laravel 11.
 
 ## Endpoints
 
